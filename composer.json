@@ -14,5 +14,10 @@
     ],
     "config": {
         "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Jnjxp\\Container\\": "src/"
+        }
     }
 }
