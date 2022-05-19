@@ -81,23 +81,36 @@ class Container implements ContainerInterface
     {
         if (isset($this->extensions[$identity])) {
             foreach ($this->extensions[$identity] as $extension) {
-                $extension = is_string($extension) ? $this->get($extension) : $extension;
+                $extension = $this->getExtension($extension);
                 $instance = $extension($this, $instance);
             }
         }
         return $instance;
     }
 
+    protected function getCallable($spec) : callable
+    {
+        if (is_callable($spec)) {
+            return $spec;
+        }
+
+        if (is_string($spec)) {
+            return $this->get($spec);
+        }
+
+        if (is_array($spec) && is_string($spec[0])) {
+            $spec[0] = $this->get($spec[0]);
+            return $spec;
+        }
+    }
+
     protected function getFactory($factory) : callable
     {
-        if (is_string($factory)) {
-            $factory = $this->get($factory);
-        }
+        return $this->getCallable($factory);
+    }
 
-        if (is_array($factory) && is_string($factory[0])) {
-            $factory[0] = $this->get($factory[0]);
-        }
-
-        return $factory;
+    protected function getExtension($extension) : callable
+    {
+        return $this->getCallable($extension);
     }
 }
