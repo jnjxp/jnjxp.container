@@ -102,6 +102,8 @@ class Container implements ContainerInterface
             $spec[0] = $this->get($spec[0]);
             return $spec;
         }
+
+        throw new ContainerException(sprintf('Unable to resolve callable for %s', gettype($spec)));
     }
 
     protected function getFactory($factory) : callable
