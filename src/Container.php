@@ -28,7 +28,7 @@ class Container implements ContainerInterface
         $this->extensions = $extensions;
     }
 
-    public function get($identity)
+    public function get(string $identity)
     {
         if (isset($this->instances[$identity])) {
             return $this->instances[$identity];
@@ -45,7 +45,7 @@ class Container implements ContainerInterface
         return $this->fromNew($identity);
     }
 
-    public function has($identity)
+    public function has(string $identity) : bool
     {
         return isset($this->instances[$identity])
             || isset($this->factories[$identity])
