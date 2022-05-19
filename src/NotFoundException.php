@@ -6,6 +6,6 @@ namespace Jnjxp\Container;
 
 use Psr\Container\NotFoundExceptionInterface;
 
-class NotFoundException implements NotFoundExceptionInterface
+class NotFoundException extends \Exception implements NotFoundExceptionInterface
 {
 }
