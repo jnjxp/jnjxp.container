@@ -16,6 +16,12 @@ class Container implements ContainerInterface
 
     protected $extensions = [];
 
+    /**
+     * @param array<string, mixed> $factories
+     * @param array<string, string> $aliases
+     * @param array<string, mixed> $instances
+     * @param array<string, mixed[]> $extensions
+     */
     public function __construct(
         array $factories = [],
         array $aliases = [],

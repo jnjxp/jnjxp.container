@@ -7,6 +7,9 @@ namespace Jnjxp\Container;
 use Psr\Container\ContainerInterface;
 use Interop\Container\ServiceProviderInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class ContainerBuilder
 {
     private $factories;
@@ -17,6 +20,12 @@ class ContainerBuilder
 
     private $extensions;
 
+    /**
+     * @param array<string, mixed> $factories
+     * @param array<string, string> $aliases
+     * @param array<string, mixed> $instances
+     * @param array<string, mixed[]> $extensions
+     */
     public function __construct(
         array $factories = [],
         array $aliases = [],
@@ -34,6 +43,9 @@ class ContainerBuilder
         $this->factories[$name] = $factory;
     }
 
+    /**
+     * @param array<string, mixed> $factories
+     */
     public function factories(array $factories) : void
     {
         foreach ($factories as $name => $factory) {
@@ -46,6 +58,9 @@ class ContainerBuilder
         $this->aliases[$name] = $implementation;
     }
 
+    /**
+     * @param array<string, string> $aliases
+     */
     public function aliases(array $aliases) : void
     {
         foreach ($aliases as $name => $alias) {
@@ -58,9 +73,12 @@ class ContainerBuilder
         $this->instances[$name] = $instance;
     }
 
+    /**
+     * @param array<string, mixed> $instances
+     */
     public function instances(array $instances) : void
     {
-        foreach ($instances as $name => $instnace) {
+        foreach ($instances as $name => $instance) {
             $this->instance($name, $instance);
         }
     }
@@ -70,6 +88,9 @@ class ContainerBuilder
         $this->extensions[$name][] = $extension;
     }
 
+    /**
+     * @param array<string, mixed>[] $specs
+     */
     public function extensions(array $specs) : void
     {
         foreach ($specs as $name => $extensions) {
@@ -85,6 +106,9 @@ class ContainerBuilder
         $this->extensions($provider->getExtensions());
     }
 
+    /**
+     * @param ServiceProviderInterface[]|string[] $providers
+     */
     public function providers(array $providers) : void
     {
         foreach ($providers as $provider) {
