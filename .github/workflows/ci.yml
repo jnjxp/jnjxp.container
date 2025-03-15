@@ -24,6 +24,10 @@ jobs:
           - '8.4'
 
     steps:
+    - uses: shivammathur/setup-php@2.30.4
+      with:
+        php-version: ${{ matrix.php }}
+
     - uses: actions/checkout@v4
 
     - name: Validate composer.json and composer.lock
