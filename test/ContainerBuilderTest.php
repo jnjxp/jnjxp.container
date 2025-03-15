@@ -29,7 +29,7 @@ final class ContainerBuilderTest extends TestCase
 
         $factories = [ $name => $factory ];
 
-        $container = new ContainerBuilder()->factories($factories)->build();
+        $container = (new ContainerBuilder())->factories($factories)->build();
 
         $this->assertFalse($container->has('BAR'));
         $this->assertTrue($container->has($name));
@@ -47,7 +47,7 @@ final class ContainerBuilderTest extends TestCase
         $factories = [ $name => $factory ];
         $aliases = [ $alias => $name ];
 
-        $container = new ContainerBuilder()
+        $container = (new ContainerBuilder())
             ->factories($factories)
             ->aliases($aliases)
             ->build();
@@ -70,7 +70,7 @@ final class ContainerBuilderTest extends TestCase
 
         $instances = [ $name => $service ];
 
-        $container = new ContainerBuilder()
+        $container = (new ContainerBuilder())
             ->instances($instances)
             ->build();
 
@@ -103,7 +103,7 @@ final class ContainerBuilderTest extends TestCase
         ];
 
 
-        $container = new ContainerBuilder()
+        $container = (new ContainerBuilder())
             ->factories($factories)
             ->extensions($extensions)
             ->build();
@@ -174,7 +174,7 @@ final class ContainerBuilderTest extends TestCase
 
     public function testFactoryProviders()
     {
-        $container = new ContainerBuilder()->providers([FakeFactoryProvider::class])->build();
+        $container = (new ContainerBuilder())->providers([FakeFactoryProvider::class])->build();
 
         $service = $container->get(FakeInterface::class);
         $this->assertInstanceOf(FakeService::class, $service);
@@ -183,7 +183,7 @@ final class ContainerBuilderTest extends TestCase
 
     public function testExtensionProviders()
     {
-        $container = new ContainerBuilder()
+        $container = (new ContainerBuilder())
             ->factories([FakeInterface::class => fn() => new FakeService(new FakeDependency())])
             ->providers([FakeExtensionProvider::class])
             ->build();
@@ -195,7 +195,7 @@ final class ContainerBuilderTest extends TestCase
 
     public function testAggregateProviders()
     {
-        $container = new ContainerBuilder()
+        $container = (new ContainerBuilder())
             ->provider(new AggregateServiceProvider(
                 FakeFactoryProvider::class,
                 FakeExtensionProvider::class
@@ -209,26 +209,26 @@ final class ContainerBuilderTest extends TestCase
     public function testBadProviders()
     {
         $this->expectException(ContainerException::class);
-        $container = new ContainerBuilder()->providers([FakeDependency::class])->build();
+        $container = (new ContainerBuilder())->providers([FakeDependency::class])->build();
     }
 
     public function testAutowire()
     {
-        $container = new ContainerBuilder()->autowire(true)->build();
+        $container = (new ContainerBuilder())->autowire(true)->build();
         $service = $container->get(FakeService::class);
         $this->assertInstanceOf(FakeService::class, $container->get(FakeService::class));
     }
 
     public function testDisableAutowire()
     {
-        $container = new ContainerBuilder()->autowire(true)->autowire(false)->build();
+        $container = (new ContainerBuilder())->autowire(true)->autowire(false)->build();
         $this->expectException(Error::class);
         $service = $container->get(FakeService::class);
     }
 
     public function testCustomAutowire()
     {
-        $container = new ContainerBuilder()->autowire(FakeAutowire::class)->build();
+        $container = (new ContainerBuilder())->autowire(FakeAutowire::class)->build();
         $this->assertInstanceOf(\stdClass::class, $container->get(FakeService::class));
     }
 }
