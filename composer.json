@@ -2,6 +2,7 @@
     "name": "jnjxp/container",
     "description": "jnjxp container package",
     "type": "library",
+    "license": "MIT",
     "require": {
         "container-interop/service-provider": "^0.4.0",
         "php": "^7.2 || ^8.0",
