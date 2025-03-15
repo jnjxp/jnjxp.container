@@ -13,6 +13,7 @@ class BaseServiceProvider implements ServiceProviderInterface
      *
      * @return array<string, string|callable>
      */
+    #[\Override]
     public function getFactories(): array
     {
         return [];
@@ -23,6 +24,7 @@ class BaseServiceProvider implements ServiceProviderInterface
      *
      * @return array<string, array<string|callable>>
      */
+    #[\Override]
     public function getExtensions(): array
     {
         return [];

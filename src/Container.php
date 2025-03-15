@@ -26,6 +26,7 @@ class Container implements ContainerInterface
     ) {
     }
 
+    #[\Override]
     public function get(string $identity): mixed
     {
         if (isset($this->instances[$identity])) {
@@ -47,6 +48,7 @@ class Container implements ContainerInterface
         return $this->fromNew($identity);
     }
 
+    #[\Override]
     public function has(string $identity): bool
     {
         return isset($this->instances[$identity])

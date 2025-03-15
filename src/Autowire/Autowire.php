@@ -21,6 +21,7 @@ class Autowire implements AutowireInterface
      * @return object The instantiated class.
      * @throws AutowireException If the class cannot be instantiated.
      */
+    #[\Override]
     public function create(string $className, ?ContainerInterface $container = null): object
     {
         $reflectionClass = new ReflectionClass($className);
@@ -54,7 +55,7 @@ class Autowire implements AutowireInterface
         $type = $parameter->getType();
 
         if ($type instanceof ReflectionUnionType) {
-            return $this->resolveUnionTypeParameter($parameter, $container);
+            return $this->resolveUnionTypeParameter($parameter, $type->getTypes(), $container);
         }
 
         if ($type instanceof ReflectionNamedType) {
@@ -74,9 +75,11 @@ class Autowire implements AutowireInterface
         );
     }
 
-    private function resolveUnionTypeParameter(ReflectionParameter $parameter, ?ContainerInterface $container): mixed
-    {
-        $types = $parameter->getType()->getTypes();
+    private function resolveUnionTypeParameter(
+        ReflectionParameter $parameter,
+        array $types,
+        ?ContainerInterface $container
+    ): mixed {
         foreach ($types as $type) {
             if ($type instanceof ReflectionNamedType) {
                 if (!$type->isBuiltin()) {
