@@ -6,12 +6,20 @@ namespace JnjxpTest\Container;
 
 use Jnjxp\Container\Container;
 use Jnjxp\Container\ContainerException;
+use Jnjxp\Container\NotFoundException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
 final class ContainerTest extends TestCase
 {
+    public function testContainerNotFound()
+    {
+        $this->expectException(NotFoundException::class);
+        $container = new Container();
+        $container->get('FOO');
+    }
+
     public function testContainerFactories()
     {
         $name = 'FOO';

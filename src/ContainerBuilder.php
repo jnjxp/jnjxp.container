@@ -11,6 +11,7 @@ use Psr\Container\ContainerInterface;
 
 /**
  * @SuppressWarnings("PHPMD.TooManyPublicMethods")
+ * @psalm-api
  */
 class ContainerBuilder
 {
@@ -41,6 +42,8 @@ class ContainerBuilder
      */
     public function factories(array $factories): self
     {
+        /** @var string $name */
+        /** @var mixed $factory */
         foreach ($factories as $name => $factory) {
             $this->factory($name, $factory);
         }
@@ -75,6 +78,7 @@ class ContainerBuilder
      */
     public function instances(array $instances): self
     {
+        /** @var mixed $instance */
         foreach ($instances as $name => $instance) {
             $this->instance($name, $instance);
         }
@@ -92,8 +96,10 @@ class ContainerBuilder
      */
     public function extensions(array $specs): self
     {
+        /** @var string $name */
         foreach ($specs as $name => $extensions) {
-            foreach ((array) $extensions as $extension) {
+            /** @var mixed $extension */
+            foreach ($extensions as $extension) {
                 $this->extension($name, $extension);
             }
         }
@@ -111,7 +117,9 @@ class ContainerBuilder
             ));
         }
 
+        /** @psalm-suppress MixedArgumentTypeCoercion */
         $this->factories($provider->getFactories());
+        /** @psalm-suppress InvalidArgument */
         $this->extensions($provider->getExtensions());
         return $this;
     }
@@ -129,7 +137,7 @@ class ContainerBuilder
 
     public function autowire(null|bool|string|AutowireInterface $autowire): self
     {
-        if (! $autowire) {
+        if (false == $autowire || null == $autowire) {
             $this->autowire = null;
             return $this;
         }
@@ -137,6 +145,12 @@ class ContainerBuilder
         if (true === $autowire) {
             $this->autowire = new Autowire();
             return $this;
+        }
+
+        $autowire = new $autowire();
+
+        if (! $autowire instanceof AutowireInterface) {
+            throw new ContainerException(get_class($autowire) . ' does not implement AutowireInterface');
         }
 
         $this->autowire = new $autowire();

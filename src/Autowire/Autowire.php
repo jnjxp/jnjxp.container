@@ -10,13 +10,14 @@ use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionUnionType;
+use ReflectionType;
 
-class Autowire implements AutowireInterface
+final class Autowire implements AutowireInterface
 {
     /**
      * Create an instance of the specified class with dependencies resolved.
      *
-     * @param string $className The name of the class to instantiate.
+     * @param class-string $className The name of the class to instantiate.
      * @param ContainerInterface|null $container An optional container for resolving dependencies.
      * @return object The instantiated class.
      * @throws AutowireException If the class cannot be instantiated.
@@ -45,9 +46,17 @@ class Autowire implements AutowireInterface
         }
     }
 
+    /**
+     * resolveDependencies
+     *
+     * @param  array<ReflectionParameter> $parameters
+     * @param  ContainerInterface|null $container
+     * @return array<mixed>
+     */
     private function resolveDependencies(array $parameters, ?ContainerInterface $container): array
     {
-        return array_map(fn($parameter) => $this->resolveParameter($parameter, $container), $parameters);
+        return array_map(fn(ReflectionParameter $parameter): mixed
+            => $this->resolveParameter($parameter, $container), $parameters);
     }
 
     private function resolveParameter(ReflectionParameter $parameter, ?ContainerInterface $container): mixed
@@ -71,10 +80,19 @@ class Autowire implements AutowireInterface
 
         throw AutowireException::cannotResolveParamForClass(
             $parameter->getName(),
-            $parameter->getDeclaringClass()->getName()
+            $parameter->getDeclaringClass()?->getName() ?? 'class'
         );
     }
 
+    /**
+     * resolveUnionTypeParameter
+     *
+     * @param  ReflectionParameter $parameter
+     * @param  array<ReflectionType> $types
+     * @param  ContainerInterface|null $container
+     * @throws AutowireException
+     * @return mixed
+     */
     private function resolveUnionTypeParameter(
         ReflectionParameter $parameter,
         array $types,
@@ -96,10 +114,18 @@ class Autowire implements AutowireInterface
 
         throw AutowireException::cannotResolveParamForClass(
             $parameter->getName(),
-            $parameter->getDeclaringClass()->getName()
+            $parameter->getDeclaringClass()?->getName() ?? 'class'
         );
     }
 
+    /**
+     * resolveClassDependency
+     *
+     * @param  ReflectionParameter $parameter
+     * @param  class-string $dependencyClass
+     * @param  ContainerInterface|null $container
+     * @return mixed
+     */
     private function resolveClassDependency(
         ReflectionParameter $parameter,
         string $dependencyClass,
@@ -133,7 +159,7 @@ class Autowire implements AutowireInterface
 
         throw AutowireException::cannotResolveParamForClass(
             $parameter->getName(),
-            $parameter->getDeclaringClass()->getName()
+            $parameter->getDeclaringClass()?->getName() ?? 'class'
         );
     }
 }

@@ -12,6 +12,8 @@ class BaseServiceProvider implements ServiceProviderInterface
      * getFactories
      *
      * @return array<string, string|callable>
+     *
+     * @psalm-suppress ImplementedReturnTypeMismatch
      */
     #[\Override]
     public function getFactories(): array

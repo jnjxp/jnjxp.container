@@ -15,10 +15,15 @@ use JnjxpTest\Container\Fake\FakeService;
 use Jnjxp\Container\Container;
 use Jnjxp\Container\ContainerBuilder;
 use Jnjxp\Container\ContainerException;
+use Jnjxp\Container\NotFoundException;
 use Jnjxp\Container\ServiceProvider\AggregateServiceProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
+/**
+ * @SuppressWarnings("PHPMD.TooManyPublicMethods")
+ * @SuppressWarnings("PHPMD.CouplingBetweenObjects")
+ */
 final class ContainerBuilderTest extends TestCase
 {
     public function testContainerFactories()
@@ -209,21 +214,20 @@ final class ContainerBuilderTest extends TestCase
     public function testBadProviders()
     {
         $this->expectException(ContainerException::class);
-        $container = (new ContainerBuilder())->providers([FakeDependency::class])->build();
+        (new ContainerBuilder())->providers([FakeDependency::class])->build();
     }
 
     public function testAutowire()
     {
         $container = (new ContainerBuilder())->autowire(true)->build();
-        $service = $container->get(FakeService::class);
         $this->assertInstanceOf(FakeService::class, $container->get(FakeService::class));
     }
 
     public function testDisableAutowire()
     {
         $container = (new ContainerBuilder())->autowire(true)->autowire(false)->build();
-        $this->expectException(Error::class);
-        $service = $container->get(FakeService::class);
+        $this->expectException(NotFoundException::class);
+        $container->get(FakeService::class);
     }
 
     public function testCustomAutowire()

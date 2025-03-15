@@ -6,7 +6,7 @@ namespace Jnjxp\Container\Autowire;
 
 use Jnjxp\Container\ContainerException;
 
-class AutowireException extends ContainerException
+final class AutowireException extends ContainerException implements AutowireExceptionInterface
 {
     public static function cannotInstantiate(string $name): self
     {
