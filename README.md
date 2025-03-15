@@ -1,4 +1,5 @@
 # jnjxp.container
+[![CI](https://github.com/jnjxp/jnjxp.container/actions/workflows/ci.yml/badge.svg)](https://github.com/jnjxp/jnjxp.container/actions/workflows/ci.yml)
 
 Yet another dependency injection container.
 
