@@ -20,5 +20,14 @@
         "psr-4": {
             "Jnjxp\\Container\\": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "JnjxpTest\\Container\\": "test/"
+        }
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^2.1",
+        "phpunit/phpunit": "^12.0"
     }
 }
